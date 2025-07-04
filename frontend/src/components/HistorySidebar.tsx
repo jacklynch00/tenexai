@@ -94,21 +94,21 @@ export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProp
 				<Button
 					variant="outline"
 					size="icon"
-					className="fixed top-4 left-4 z-40 lg:top-6 lg:left-6 bg-white/90 backdrop-blur-sm border-white/30 hover:bg-white/95"
+					className="fixed top-4 left-4 z-40 lg:top-6 lg:left-6 bg-white/95 backdrop-blur-sm border-gray-200 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-200"
 				>
-					<History className="h-4 w-4" />
+					<History className="h-4 w-4 text-gray-700" />
 					<span className="sr-only">Open analysis history</span>
 				</Button>
 			</SheetTrigger>
-			<SheetContent side="left" className="w-[350px] sm:w-[400px] p-0">
-				<SheetHeader className="p-6 pb-4">
-					<SheetTitle className="flex items-center gap-2">
-						<History className="h-5 w-5" />
+			<SheetContent side="left" className="w-[350px] sm:w-[400px] p-0 bg-white">
+				<SheetHeader className="p-6 pb-4 border-b border-gray-200">
+					<SheetTitle className="flex items-center gap-2 text-gray-900">
+						<History className="h-5 w-5 text-blue-600" />
 						Analysis History
 					</SheetTitle>
 				</SheetHeader>
 				
-				<div className="flex-1 overflow-y-auto px-6 pb-6">
+				<div className="flex-1 overflow-y-auto px-6 pb-6 max-h-[calc(100vh-120px)]">
 					{history.length === 0 ? (
 						<div className="text-center text-gray-500 py-8">
 							<Clock className="h-12 w-12 mx-auto mb-3 text-gray-300" />
@@ -116,13 +116,13 @@ export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProp
 							<p className="text-sm mt-1">Your analysis history will appear here</p>
 						</div>
 					) : (
-						<div className="space-y-3">
+						<div className="space-y-3 mt-4">
 							<div className="flex justify-end">
 								<Button 
 									variant="ghost" 
 									size="sm" 
 									onClick={handleClearAll}
-									className="text-red-600 hover:text-red-700 hover:bg-red-50"
+									className="text-red-600 hover:text-red-700 hover:bg-red-50 h-8"
 								>
 									Clear All
 								</Button>
@@ -132,23 +132,25 @@ export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProp
 									key={item.id}
 									onClick={() => handleSelectAnalysis(item.id)}
 									className={cn(
-										'p-4 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors border group',
-										currentAnalysisId === item.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+										'p-4 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors border group shadow-sm',
+										currentAnalysisId === item.id 
+											? 'border-blue-500 bg-blue-50 shadow-blue-100' 
+											: 'border-gray-200 hover:border-gray-300'
 									)}
 								>
 									<div className="flex items-start justify-between">
 										<div className="flex-1 min-w-0">
-											<h3 className="font-medium text-gray-900 truncate">{item.title}</h3>
-											<p className="text-sm text-gray-500 mt-1">{item.industry}</p>
+											<h3 className="font-medium text-gray-900 truncate text-sm">{item.title}</h3>
+											<p className="text-xs text-gray-500 mt-1">{item.industry}</p>
 											<p className="text-xs text-gray-400 mt-1">{formatDate(item.createdAt)}</p>
 										</div>
 										<Button
 											variant="ghost"
 											size="icon"
 											onClick={(e) => handleDelete(e, item.id)}
-											className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 h-8 w-8 text-gray-500 hover:text-red-600 hover:bg-red-50"
+											className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 h-7 w-7 text-gray-400 hover:text-red-600 hover:bg-red-50"
 										>
-											<Trash2 className="h-4 w-4" />
+											<Trash2 className="h-3 w-3" />
 										</Button>
 									</div>
 								</div>
