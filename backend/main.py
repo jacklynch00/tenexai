@@ -1,8 +1,10 @@
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Response, status, Depends, HTTPException
 from sqlalchemy.orm import Session
-import os
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
+import os
+import json
 
 load_dotenv()
 
@@ -22,19 +24,9 @@ except Exception as e:
     print(f"OpenAI service import failed: {e}")
     OPENAI_AVAILABLE = False
 
-app = FastAPI(title="AI Opportunity Scanner API", version="1.0.0")
-
-# CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:3000").split(","),
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
     print("Starting AI Opportunity Scanner API...")
     print(f"Database available: {DATABASE_AVAILABLE}")
     print(f"OpenAI available: {OPENAI_AVAILABLE}")
@@ -50,10 +42,26 @@ async def startup_event():
             print("Database tables created successfully")
         except Exception as e:
             print(f"Failed to create database tables: {e}")
+    
+    yield
+    
+    # Shutdown
+    print("Shutting down AI Opportunity Scanner API...")
+
+app = FastAPI(title="AI Opportunity Scanner API", version="1.0.0", lifespan=lifespan)
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:3000").split(","),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/api/health")
 async def health_check():
-    return {
+    data = {
         "status": "healthy", 
         "message": "AI Opportunity Scanner API is running",
         "database_available": DATABASE_AVAILABLE,
@@ -64,6 +72,11 @@ async def health_check():
             "cors_origins": os.getenv("CORS_ORIGINS", "not_set")
         }
     }
+    return Response(
+        content=json.dumps(data),
+        status_code=status.HTTP_200_OK,
+        media_type="application/json"
+    )
 
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze_job_description_endpoint(request: AnalyzeRequest, db: Session = Depends(get_db)):
