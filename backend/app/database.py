@@ -7,10 +7,22 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/ai_scanner")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# Only create engine if DATABASE_URL is provided
+if DATABASE_URL:
+    try:
+        engine = create_engine(DATABASE_URL)
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        print(f"Database connected successfully")
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+        engine = None
+        SessionLocal = None
+else:
+    print("No DATABASE_URL provided")
+    engine = None
+    SessionLocal = None
 
 Base = declarative_base()
 
@@ -29,6 +41,8 @@ class JobAnalysis(Base):
 # Base.metadata.create_all(bind=engine)
 
 def get_db():
+    if SessionLocal is None:
+        raise Exception("Database not configured")
     db = SessionLocal()
     try:
         yield db

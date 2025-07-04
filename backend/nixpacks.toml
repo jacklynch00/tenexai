@@ -5,7 +5,7 @@ aptPkgs = ["gcc", "postgresql-client"]
 cmds = ["pip install -r requirements.txt"]
 
 [phases.build]
-cmds = ["chmod +x entrypoint.sh"]
+cmds = ["echo 'Build complete'"]
 
 [start]
-cmd = "./entrypoint.sh" 
+cmd = "uvicorn main:app --host 0.0.0.0 --port 8000" 
