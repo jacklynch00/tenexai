@@ -5,7 +5,7 @@ aptPkgs = ["gcc", "postgresql-client"]
 cmds = ["pip install -r requirements.txt"]
 
 [phases.build]
-cmds = ["echo 'Build phase completed'"]
+cmds = ["chmod +x entrypoint.sh"]
 
 [start]
-cmd = "python main.py" 
+cmd = "./entrypoint.sh" 

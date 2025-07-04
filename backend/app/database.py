@@ -25,8 +25,8 @@ class JobAnalysis(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-# Create tables
-Base.metadata.create_all(bind=engine)
+# Tables will be created by the entrypoint script
+# Base.metadata.create_all(bind=engine)
 
 def get_db():
     db = SessionLocal()
