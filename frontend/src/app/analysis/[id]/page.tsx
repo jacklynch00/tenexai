@@ -14,6 +14,7 @@ export default function AnalysisPage() {
 	const [analysis, setAnalysis] = useState<SavedAnalysis | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [showJobDescription, setShowJobDescription] = useState(false);
+	const [historyOpen, setHistoryOpen] = useState(false);
 
 	useEffect(() => {
 		const id = params.id as string;
@@ -38,8 +39,8 @@ export default function AnalysisPage() {
 	if (!analysis) {
 		return (
 			<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
-				<Header />
-				<HistorySidebar />
+				<Header onHistoryClick={handleHistoryClick} />
+				<HistorySidebar isOpen={historyOpen} onOpenChange={setHistoryOpen} />
 				<main className='w-full'>
 					<div className='flex items-center justify-center min-h-screen pt-20 sm:pt-28 px-4'>
 						<div className='text-center max-w-md mx-auto'>
@@ -62,10 +63,18 @@ export default function AnalysisPage() {
 		router.push('/');
 	};
 
+	const handleHistoryClick = () => {
+		setHistoryOpen(true);
+	};
+
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
-			<Header />
-			<HistorySidebar currentAnalysisId={analysis.id} />
+			<Header onHistoryClick={handleHistoryClick} />
+			<HistorySidebar 
+				currentAnalysisId={analysis.id} 
+				isOpen={historyOpen} 
+				onOpenChange={setHistoryOpen} 
+			/>
 
 			<main className='w-full'>
 				<div className='max-w-7xl mx-auto px-4 pt-20 sm:pt-28 pb-8'>

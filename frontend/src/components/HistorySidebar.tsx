@@ -10,16 +10,16 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 
 interface HistorySidebarProps {
 	currentAnalysisId?: string;
+	isOpen: boolean;
+	onOpenChange: (open: boolean) => void;
 }
 
-export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProps) {
-	const [isOpen, setIsOpen] = useState(false);
+export default function HistorySidebar({ currentAnalysisId, isOpen, onOpenChange }: HistorySidebarProps) {
 	const [history, setHistory] = useState<SavedAnalysis[]>([]);
 	const router = useRouter();
 
@@ -48,7 +48,7 @@ export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProp
 
 	const handleSelectAnalysis = (id: string) => {
 		router.push(`/analysis/${id}`);
-		setIsOpen(false); // Close the sheet after navigation
+		onOpenChange(false); // Close the sheet after navigation
 	};
 
 	const handleDelete = (e: React.MouseEvent, id: string) => {
@@ -89,17 +89,7 @@ export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProp
 	};
 
 	return (
-		<Sheet open={isOpen} onOpenChange={setIsOpen}>
-			<SheetTrigger asChild>
-				<Button
-					variant="outline"
-					size="icon"
-					className="fixed top-4 left-4 z-40 lg:top-6 lg:left-6 bg-white/95 backdrop-blur-sm border-gray-200 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-200"
-				>
-					<History className="h-4 w-4 text-gray-700" />
-					<span className="sr-only">Open analysis history</span>
-				</Button>
-			</SheetTrigger>
+		<Sheet open={isOpen} onOpenChange={onOpenChange}>
 			<SheetContent side="left" className="w-[350px] sm:w-[400px] p-0 bg-white">
 				<SheetHeader className="p-6 pb-4 border-b border-gray-200">
 					<SheetTitle className="flex items-center gap-2 text-gray-900">

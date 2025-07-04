@@ -29,6 +29,7 @@ export default function Home() {
 	const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [sessionId, setSessionId] = useState<string>('');
+	const [historyOpen, setHistoryOpen] = useState(false);
 
 	const analyzeMutation = useMutation({
 		mutationFn: analyzeJobDescription,
@@ -110,10 +111,14 @@ export default function Home() {
 		}
 	};
 
+	const handleHistoryClick = () => {
+		setHistoryOpen(true);
+	};
+
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
-			<Header onGetStarted={handleGetStarted} />
-			<HistorySidebar />
+			<Header onGetStarted={handleGetStarted} onHistoryClick={handleHistoryClick} />
+			<HistorySidebar isOpen={historyOpen} onOpenChange={setHistoryOpen} />
 			<main className='w-full'>
 				<div className='max-w-7xl mx-auto px-4 pt-20 sm:pt-28 pb-16'>
 					{appState === 'input' && (

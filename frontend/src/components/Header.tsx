@@ -1,12 +1,15 @@
 'use client';
 
 import React from 'react';
+import { History } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface HeaderProps {
   onGetStarted?: () => void;
+  onHistoryClick?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onGetStarted }) => {
+const Header: React.FC<HeaderProps> = ({ onGetStarted, onHistoryClick }) => {
   const handleGetStarted = () => {
     if (onGetStarted) {
       onGetStarted();
@@ -34,8 +37,22 @@ const Header: React.FC<HeaderProps> = ({ onGetStarted }) => {
                 </div>
               </div>
 
-              {/* Get Started Button */}
-              <div className="flex items-center">
+              {/* Buttons */}
+              <div className="flex items-center gap-2 sm:gap-3">
+                {/* History Button */}
+                {onHistoryClick && (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={onHistoryClick}
+                    className="h-10 w-10 sm:h-11 sm:w-11 bg-white/95 backdrop-blur-sm border-gray-200 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
+                    <History className="h-4 w-4 text-gray-700" />
+                    <span className="sr-only">Open analysis history</span>
+                  </Button>
+                )}
+                
+                {/* Get Started Button */}
                 <button
                   onClick={handleGetStarted}
                   className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
