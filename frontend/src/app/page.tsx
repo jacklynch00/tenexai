@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { analyzeJobDescription, type AnalyzeRequest } from '@/lib/api';
 import JobDescriptionInput from '@/components/JobDescriptionInput';
 import EmailCapture from '@/components/EmailCapture';
 import LoadingState from '@/components/LoadingState';
@@ -9,7 +11,7 @@ import ResultsDashboard from '@/components/ResultsDashboard';
 import HistorySidebar from '@/components/HistorySidebar';
 import { saveAnalysis } from '@/lib/history';
 
-type AppState = 'input' | 'email' | 'loading' | 'results';
+type AppState = 'input' | 'email' | 'loading' | 'results' | 'error';
 
 interface AnalysisData {
 	id: number;
@@ -24,36 +26,14 @@ export default function Home() {
 	const [title, setTitle] = useState('');
 	const [email, setEmail] = useState('');
 	const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
+	const [errorMessage, setErrorMessage] = useState('');
 
-	const handleJobDescriptionSubmit = (description: string, selectedIndustry: string, jobTitle: string) => {
-		setJobDescription(description);
-		setIndustry(selectedIndustry);
-		setTitle(jobTitle);
-		setAppState('email');
-	};
-
-	const handleEmailSubmit = async (userEmail?: string) => {
-		setEmail(userEmail || '');
-		setAppState('loading');
-
-		try {
-			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/analyze`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					job_description: jobDescription,
-					industry: industry,
-					user_email: userEmail || null,
-				}),
-			});
-
-			if (!response.ok) {
-				throw new Error('Analysis failed');
-			}
-
-			const data = await response.json();
+	const analyzeMutation = useMutation({
+		mutationFn: analyzeJobDescription,
+		onMutate: () => {
+			setAppState('loading');
+		},
+		onSuccess: (data) => {
 			setAnalysisData(data);
 
 			// Save to session storage
@@ -69,11 +49,31 @@ export default function Home() {
 
 			// Navigate to the saved analysis page
 			router.push(`/analysis/${savedAnalysis.id}`);
-		} catch (error) {
+		},
+		onError: (error: Error) => {
 			console.error('Analysis error:', error);
-			alert('Analysis failed. Please try again.');
-			setAppState('input');
-		}
+			setErrorMessage(error.message || 'Analysis failed. Please try again.');
+			setAppState('error');
+		},
+	});
+
+	const handleJobDescriptionSubmit = (description: string, selectedIndustry: string, jobTitle: string) => {
+		setJobDescription(description);
+		setIndustry(selectedIndustry);
+		setTitle(jobTitle);
+		setAppState('email');
+	};
+
+	const handleEmailSubmit = async (userEmail?: string) => {
+		setEmail(userEmail || '');
+		
+		const requestData = {
+			job_description: jobDescription,
+			industry: industry,
+			user_email: userEmail || undefined,
+		};
+		
+		analyzeMutation.mutate(requestData);
 	};
 
 	const handleStartOver = () => {
@@ -83,6 +83,14 @@ export default function Home() {
 		setTitle('');
 		setEmail('');
 		setAnalysisData(null);
+		setErrorMessage('');
+		analyzeMutation.reset();
+	};
+
+	const handleRetry = () => {
+		setAppState('email');
+		setErrorMessage('');
+		analyzeMutation.reset();
 	};
 
 	return (
@@ -178,6 +186,34 @@ export default function Home() {
 						{appState === 'email' && <EmailCapture onSubmit={handleEmailSubmit} />}
 
 						{appState === 'loading' && <LoadingState />}
+
+						{appState === 'error' && (
+							<div className="bg-white rounded-lg shadow-lg p-8">
+								<div className="text-center">
+									<div className="text-red-600 text-6xl mb-4">⚠️</div>
+									<h2 className="text-2xl font-bold text-gray-900 mb-4">
+										Analysis Failed
+									</h2>
+									<p className="text-gray-600 mb-6">
+										{errorMessage}
+									</p>
+									<div className="space-x-4">
+										<button
+											onClick={handleRetry}
+											className="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-medium"
+										>
+											Try Again
+										</button>
+										<button
+											onClick={handleStartOver}
+											className="bg-gray-200 text-gray-700 py-3 px-6 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-medium"
+										>
+											Start Over
+										</button>
+									</div>
+								</div>
+							</div>
+						)}
 
 						{appState === 'results' && analysisData && <ResultsDashboard analysis={analysisData.analysis} onStartOver={handleStartOver} />}
 					</div>
