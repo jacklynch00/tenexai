@@ -9,7 +9,7 @@ import EmailCapture from '@/components/EmailCapture';
 import LoadingState from '@/components/LoadingState';
 import ResultsDashboard from '@/components/ResultsDashboard';
 import HistorySidebar from '@/components/HistorySidebar';
-import { saveAnalysis } from '@/lib/history';
+import { saveAnalysis, generateId } from '@/lib/history';
 
 type AppState = 'input' | 'email' | 'loading' | 'results' | 'error';
 
@@ -27,6 +27,7 @@ export default function Home() {
 	const [email, setEmail] = useState('');
 	const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
 	const [errorMessage, setErrorMessage] = useState('');
+	const [sessionId, setSessionId] = useState<string>('');
 
 	const analyzeMutation = useMutation({
 		mutationFn: analyzeJobDescription,
@@ -36,19 +37,27 @@ export default function Home() {
 		onSuccess: (data) => {
 			setAnalysisData(data);
 
-			// Save to session storage
-			const savedAnalysis = saveAnalysis({
+			// Save to session storage with pre-generated ID
+			const savedAnalysis = {
+				id: sessionId,
 				title,
 				jobDescription,
 				industry,
 				analysis: data.analysis,
-			});
+				createdAt: new Date().toISOString(),
+			};
+
+			// Save using existing function but with custom ID
+			const history = JSON.parse(sessionStorage.getItem('ai-opportunity-scanner-history') || '[]');
+			history.unshift(savedAnalysis);
+			if (history.length > 20) history.pop();
+			sessionStorage.setItem('ai-opportunity-scanner-history', JSON.stringify(history));
 
 			// Dispatch event to update sidebar
 			window.dispatchEvent(new Event('analysisHistoryUpdated'));
 
 			// Navigate to the saved analysis page
-			router.push(`/analysis/${savedAnalysis.id}`);
+			router.push(`/analysis/${sessionId}`);
 		},
 		onError: (error: Error) => {
 			console.error('Analysis error:', error);
@@ -61,6 +70,7 @@ export default function Home() {
 		setJobDescription(description);
 		setIndustry(selectedIndustry);
 		setTitle(jobTitle);
+		setSessionId(generateId()); // Generate session ID upfront
 		setAppState('email');
 	};
 
@@ -71,6 +81,7 @@ export default function Home() {
 			job_description: jobDescription,
 			industry: industry,
 			user_email: userEmail || undefined,
+			session_id: sessionId,
 		};
 		
 		analyzeMutation.mutate(requestData);
@@ -84,6 +95,7 @@ export default function Home() {
 		setEmail('');
 		setAnalysisData(null);
 		setErrorMessage('');
+		setSessionId('');
 		analyzeMutation.reset();
 	};
 

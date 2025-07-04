@@ -109,7 +109,8 @@ async def analyze_job_description_endpoint(
                 to_email=request.user_email,
                 analysis_id=analysis_id,
                 analysis_data=analysis_data,
-                frontend_url=os.getenv("FRONTEND_URL", "http://localhost:3000")
+                frontend_url=os.getenv("FRONTEND_URL", "http://localhost:3000"),
+                session_id=request.session_id
             )
             logger.info(f"Email task queued for {request.user_email}")
         

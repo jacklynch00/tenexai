@@ -19,6 +19,7 @@ class AnalyzeRequest(BaseModel):
     job_description: str
     user_email: Optional[str] = None
     industry: Industry
+    session_id: Optional[str] = None
 
 class TaskBreakdown(BaseModel):
     task_name: str

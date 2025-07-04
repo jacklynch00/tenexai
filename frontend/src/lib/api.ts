@@ -2,6 +2,7 @@ export interface AnalyzeRequest {
   job_description: string
   user_email?: string
   industry: string
+  session_id?: string
 }
 
 export interface TaskBreakdown {

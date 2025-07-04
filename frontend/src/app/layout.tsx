@@ -34,8 +34,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>AI Opportunity Scanner</title>
-        <meta name="description" content="Analyze job descriptions and discover AI automation opportunities" />
+        <title>Automate This Job</title>
+        <meta name="description" content="Discover AI automation opportunities for any job with detailed ROI analysis" />
       </head>
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
