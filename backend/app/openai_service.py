@@ -79,6 +79,10 @@ Industry: {industry}
 Extracted Job Data:
 {json.dumps(extracted_data, indent=2)}
 
+CRITICAL INSTRUCTION: The extracted job data above contains salary information. If "annualized_min" and "annualized_max" are present, use these values for all salary calculations. If the original salary was hourly (e.g., $25/hour), the annualized values have already been converted to annual amounts (e.g., $52,000/year). 
+
+Base all your task savings calculations on the annualized salary amounts, not the original hourly rates. All "estimated_annual_savings" values in your response should be in dollars per year.
+
 Please provide a comprehensive analysis in the following JSON format. Use the extracted job data to make your recommendations more accurate and specific:
 
 {{
@@ -128,9 +132,11 @@ Guidelines:
 2. Consider the specific {industry} industry context and requirements
 3. Calculate ROI based on time savings and implementation costs
 4. IMPORTANT: Use annualized salary data from extracted_data for accurate cost calculations:
-   - If annualized_min/max are available, use those for current_annual_cost
-   - Factor in the actual salary when calculating time savings value
+   - If annualized_min/max are available, use those for current_annual_cost and task savings
+   - Calculate task savings based on annual salary (not hourly rates)
+   - Each task's estimated_annual_savings should be in dollars per year
    - Consider the job level and experience when estimating automation value
+   - NEVER show hourly rates in the final output - all savings must be annualized
 5. Ensure task breakdown covers the most automatable aspects of the role
 6. Implementation roadmap should be practical with clear phases
 7. Be specific about automation approaches (not generic)
@@ -162,7 +168,9 @@ async def extract_job_data(job_description: str) -> Dict[str, Any]:
         )
         
         extracted_text = response.choices[0].message.content.strip()
+        print(f"Raw extraction response: {extracted_text}")
         extracted_data = json.loads(extracted_text)
+        print(f"Parsed extraction data: {json.dumps(extracted_data, indent=2)}")
         
         return extracted_data
         
@@ -170,7 +178,14 @@ async def extract_job_data(job_description: str) -> Dict[str, Any]:
         print(f"Error extracting job data: {e}")
         # Return default structure if extraction fails
         return {
-            "salary_range": {"min": None, "max": None, "currency": None},
+            "salary_range": {
+                "min": None, 
+                "max": None, 
+                "currency": None,
+                "pay_frequency": None,
+                "annualized_min": None,
+                "annualized_max": None
+            },
             "job_level": None,
             "experience_required": {"min_years": None, "max_years": None},
             "location": None,
@@ -185,16 +200,34 @@ async def extract_job_data(job_description: str) -> Dict[str, Any]:
 def calculate_realistic_salary(extracted_data: Dict[str, Any], industry: str) -> int:
     """Calculate realistic salary based on extracted data and industry averages."""
     
-    # If salary is explicitly mentioned, use the midpoint
+    # First check for annualized salary data
     salary_range = extracted_data.get("salary_range", {})
-    if salary_range.get("min") and salary_range.get("max"):
+    print(f"Salary range data: {salary_range}")
+    
+    # Use annualized values if available (these are already converted to annual)
+    if salary_range.get("annualized_min") and salary_range.get("annualized_max"):
+        calculated_salary = int((salary_range["annualized_min"] + salary_range["annualized_max"]) / 2)
+        print(f"Using annualized average: ${calculated_salary:,}")
+        return calculated_salary
+    elif salary_range.get("annualized_min"):
+        calculated_salary = int(salary_range["annualized_min"] * 1.15)  # Assume range is +15% above minimum
+        print(f"Using annualized min with 15% buffer: ${calculated_salary:,}")
+        return calculated_salary
+    elif salary_range.get("annualized_max"):
+        calculated_salary = int(salary_range["annualized_max"] * 0.85)  # Assume range is -15% below maximum
+        print(f"Using annualized max with 15% discount: ${calculated_salary:,}")
+        return calculated_salary
+    
+    # Fallback to original min/max if they're already annual
+    elif salary_range.get("pay_frequency") == "annually" and salary_range.get("min") and salary_range.get("max"):
         return int((salary_range["min"] + salary_range["max"]) / 2)
-    elif salary_range.get("min"):
-        return int(salary_range["min"] * 1.15)  # Assume range is +15% above minimum
-    elif salary_range.get("max"):
-        return int(salary_range["max"] * 0.85)  # Assume range is -15% below maximum
+    elif salary_range.get("pay_frequency") == "annually" and salary_range.get("min"):
+        return int(salary_range["min"] * 1.15)
+    elif salary_range.get("pay_frequency") == "annually" and salary_range.get("max"):
+        return int(salary_range["max"] * 0.85)
     
     # Otherwise, estimate based on other factors
+    print("No annualized salary data found, using estimation based on other factors")
     job_level = extracted_data.get("job_level", "mid")
     
     # Extract experience years
@@ -224,12 +257,14 @@ def calculate_realistic_salary(extracted_data: Dict[str, Any], industry: str) ->
     else:
         location = "national_average"
     
-    return estimate_salary_from_extracted_data(
+    estimated_salary = estimate_salary_from_extracted_data(
         industry=industry,
         job_level=job_level or "mid",
         experience_years=experience_years,
         location=location
     )
+    print(f"Estimated salary from industry data: ${estimated_salary:,}")
+    return estimated_salary
 
 async def analyze_job_description(job_description: str, industry: str) -> Dict[str, Any]:
     try:
@@ -243,6 +278,7 @@ async def analyze_job_description(job_description: str, industry: str) -> Dict[s
         
         # Create analysis prompt with extracted data
         prompt = create_analysis_prompt(job_description, industry, extracted_data)
+        print(f"Analysis prompt being sent to OpenAI: {prompt[:1000]}...")
         
         # Initialize client with only API key
         import httpx
@@ -295,11 +331,19 @@ async def analyze_job_description(job_description: str, industry: str) -> Dict[s
         
         # Update task breakdown with proportional savings
         total_task_savings = sum(task["estimated_annual_savings"] for task in analysis["task_breakdown"])
+        print(f"Original total task savings from OpenAI: ${total_task_savings:,}")
+        print(f"Calculated annual savings to distribute: ${annual_savings:,}")
+        
         if total_task_savings > 0:
             for task in analysis["task_breakdown"]:
                 # Proportionally distribute the realistic annual savings across tasks
+                original_savings = task["estimated_annual_savings"]
                 task_proportion = task["estimated_annual_savings"] / total_task_savings
-                task["estimated_annual_savings"] = int(annual_savings * task_proportion)
+                new_savings = int(annual_savings * task_proportion)
+                task["estimated_annual_savings"] = new_savings
+                print(f"Task '{task['task_name']}': ${original_savings:,} -> ${new_savings:,}")
+        else:
+            print("No task savings to redistribute - keeping OpenAI original values")
         
         # Update implementation roadmap with realistic costs
         total_roadmap_savings = sum(phase["estimated_savings"] for phase in analysis["implementation_roadmap"])
