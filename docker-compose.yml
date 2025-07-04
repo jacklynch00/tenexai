@@ -24,6 +24,9 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ai_scanner
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_FROM_EMAIL: AI Scanner <noreply@example.com>
+      FRONTEND_URL: http://localhost:3000
       CORS_ORIGINS: http://localhost:3000
     depends_on:
       postgres:

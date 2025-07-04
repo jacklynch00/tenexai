@@ -119,6 +119,9 @@ The frontend will be available at `http://localhost:3000`
 OPENAI_API_KEY=your_openai_api_key_here
 DATABASE_URL=postgresql://user:password@host:port/dbname
 CORS_ORIGINS=http://localhost:3000,https://your-frontend.railway.app
+RESEND_API_KEY=your_resend_api_key_here
+RESEND_FROM_EMAIL=AI Scanner <noreply@yourdomain.com>
+FRONTEND_URL=http://localhost:3000
 ```
 
 ### Frontend (.env.local)
@@ -146,6 +149,8 @@ The application will automatically build and deploy when you push to your reposi
 - **Interactive Dashboard**: Comprehensive results with charts and visualizations
 - **Implementation Roadmap**: Phased approach to automation implementation
 - **Tool Recommendations**: Specific AI and automation tools for each task
+- **Email Delivery**: Professional HTML email reports with embedded charts sent via Resend
+- **Asynchronous Processing**: Email sending doesn't block the analysis response
 
 ## API Endpoints
 
