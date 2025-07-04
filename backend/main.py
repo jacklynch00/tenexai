@@ -59,18 +59,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/health")
+async def simple_health_check():
+    return "OK"
+
+@app.get("/")
+async def root():
+    return {"message": "AI Opportunity Scanner API", "status": "running"}
+
 @app.get("/api/health")
 async def health_check():
     data = {
         "status": "healthy", 
         "message": "AI Opportunity Scanner API is running",
-        "database_available": DATABASE_AVAILABLE,
-        "openai_available": OPENAI_AVAILABLE,
-        "environment": {
-            "openai_api_key": "set" if os.getenv("OPENAI_API_KEY") else "missing",
-            "database_url": "set" if os.getenv("DATABASE_URL") else "missing",
-            "cors_origins": os.getenv("CORS_ORIGINS", "not_set")
-        }
     }
     return Response(
         content=json.dumps(data),
