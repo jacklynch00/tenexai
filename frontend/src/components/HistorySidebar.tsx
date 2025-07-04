@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronRight, X, Trash2, Clock } from 'lucide-react';
+import { ChevronRight, Trash2, Clock } from 'lucide-react';
 import { SavedAnalysis, getAnalysisHistory, clearHistory, deleteAnalysis } from '@/lib/history';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -101,6 +101,11 @@ export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProp
 							</div>
 						) : (
 							<div className='p-2'>
+								<div className='flex justify-end mb-2'>
+									<button onClick={handleClearAll} className='px-2 py-1 text-xs text-red-600 hover:bg-red-50 rounded transition-colors'>
+										Clear All
+									</button>
+								</div>
 								{history.map((item) => (
 									<div
 										key={item.id}
@@ -124,15 +129,6 @@ export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProp
 							</div>
 						)}
 					</div>
-
-					{/* Footer */}
-					{history.length > 0 && (
-						<div className='p-4 border-t'>
-							<button onClick={handleClearAll} className='w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors'>
-								Clear All History
-							</button>
-						</div>
-					)}
 				</>
 			) : (
 				/* Collapsed state - only expand button */
