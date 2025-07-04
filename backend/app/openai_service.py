@@ -29,7 +29,10 @@ Extract:
     "salary_range": {{
         "min": <number or null>,
         "max": <number or null>,
-        "currency": "<string or null>"
+        "currency": "<string or null>",
+        "pay_frequency": "<hourly|weekly|monthly|annually or null>",
+        "annualized_min": <number or null>,
+        "annualized_max": <number or null>
     }},
     "job_level": "<entry|junior|mid|senior|lead|manager|director|vp|c-level or null>",
     "experience_required": {{
@@ -49,6 +52,14 @@ Instructions:
 - Extract only information explicitly mentioned in the job description
 - Use null for any field not found in the description
 - For salary, look for ranges, specific amounts, or "competitive" mentions
+- IMPORTANT: For salary annualization, calculate based on job context:
+  * Hourly rates: Look for full-time (40h/week) vs part-time hours, days per week
+  * If hourly + full-time: multiply by 2080 hours/year (40h × 52 weeks)
+  * If hourly + specific hours: use those hours × 52 weeks
+  * If hourly + days/week: estimate hours/day (typically 8) × days × 52 weeks
+  * Weekly rates: multiply by 52 weeks
+  * Monthly rates: multiply by 12 months
+  * If schedule mentions "Monday to Friday" + "8 hour shift" = 40 hours/week
 - For job level, infer from title and requirements (e.g., "Senior" = senior, "Manager" = manager)
 - For location, extract city/state or note if remote/hybrid is mentioned
 - Be precise and don't make assumptions beyond what's written
@@ -116,9 +127,14 @@ Guidelines:
 1. Focus on realistic, implementable automation opportunities
 2. Consider the specific {industry} industry context and requirements
 3. Calculate ROI based on time savings and implementation costs
-4. Ensure task breakdown covers the most automatable aspects of the role
-5. Implementation roadmap should be practical with clear phases
-6. Be specific about automation approaches (not generic)
+4. IMPORTANT: Use annualized salary data from extracted_data for accurate cost calculations:
+   - If annualized_min/max are available, use those for current_annual_cost
+   - Factor in the actual salary when calculating time savings value
+   - Consider the job level and experience when estimating automation value
+5. Ensure task breakdown covers the most automatable aspects of the role
+6. Implementation roadmap should be practical with clear phases
+7. Be specific about automation approaches (not generic)
+8. Make ROI calculations realistic based on the actual compensation level
 
 Return ONLY the JSON response, no additional text.
 """
