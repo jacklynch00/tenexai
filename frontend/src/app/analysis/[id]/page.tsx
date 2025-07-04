@@ -25,6 +25,14 @@ export default function AnalysisPage() {
 		setLoading(false);
 	}, [params.id]);
 
+	const handleStartOver = () => {
+		router.push('/');
+	};
+
+	const handleHistoryClick = () => {
+		setHistoryOpen(true);
+	};
+
 	if (loading) {
 		return (
 			<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4'>
@@ -46,10 +54,9 @@ export default function AnalysisPage() {
 						<div className='text-center max-w-md mx-auto'>
 							<h1 className='text-xl sm:text-2xl font-bold text-gray-900 mb-4'>Analysis Not Found</h1>
 							<p className='text-sm sm:text-base text-gray-600 mb-6'>The analysis you&apos;re looking for doesn&apos;t exist or has been deleted.</p>
-							<button 
-								onClick={() => router.push('/')} 
-								className='bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm sm:text-base'
-							>
+							<button
+								onClick={() => router.push('/')}
+								className='bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm sm:text-base'>
 								Go Home
 							</button>
 						</div>
@@ -59,22 +66,10 @@ export default function AnalysisPage() {
 		);
 	}
 
-	const handleStartOver = () => {
-		router.push('/');
-	};
-
-	const handleHistoryClick = () => {
-		setHistoryOpen(true);
-	};
-
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
 			<Header onHistoryClick={handleHistoryClick} />
-			<HistorySidebar 
-				currentAnalysisId={analysis.id} 
-				isOpen={historyOpen} 
-				onOpenChange={setHistoryOpen} 
-			/>
+			<HistorySidebar currentAnalysisId={analysis.id} isOpen={historyOpen} onOpenChange={setHistoryOpen} />
 
 			<main className='w-full'>
 				<div className='max-w-7xl mx-auto px-4 pt-20 sm:pt-28 pb-8'>
@@ -109,15 +104,16 @@ export default function AnalysisPage() {
 							<div className='bg-white rounded-lg shadow-lg p-4 sm:p-6'>
 								<div className='flex items-center justify-between mb-4'>
 									<h2 className='text-lg sm:text-xl font-semibold text-gray-900'>Job Description</h2>
-									<button 
-										onClick={() => setShowJobDescription(false)} 
-										className='text-gray-500 hover:text-gray-700 p-1 hover:bg-gray-100 rounded text-xl sm:text-2xl w-8 h-8 flex items-center justify-center'
-									>
+									<button
+										onClick={() => setShowJobDescription(false)}
+										className='text-gray-500 hover:text-gray-700 p-1 hover:bg-gray-100 rounded text-xl sm:text-2xl w-8 h-8 flex items-center justify-center'>
 										×
 									</button>
 								</div>
 								<div className='prose max-w-none'>
-									<pre className='whitespace-pre-wrap text-xs sm:text-sm text-gray-700 bg-gray-50 p-3 sm:p-4 rounded border overflow-x-auto'>{analysis.jobDescription}</pre>
+									<pre className='whitespace-pre-wrap text-xs sm:text-sm text-gray-700 bg-gray-50 p-3 sm:p-4 rounded border overflow-x-auto'>
+										{analysis.jobDescription}
+									</pre>
 								</div>
 							</div>
 						</div>
