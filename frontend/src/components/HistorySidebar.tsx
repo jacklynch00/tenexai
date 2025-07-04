@@ -90,7 +90,7 @@ export default function HistorySidebar({ currentAnalysisId, isOpen, onOpenChange
 
 	return (
 		<Sheet open={isOpen} onOpenChange={onOpenChange}>
-			<SheetContent side="left" className="w-[350px] sm:w-[400px] p-0 bg-white">
+			<SheetContent side="right" className="w-[350px] sm:w-[400px] p-0 bg-white">
 				<SheetHeader className="p-6 pb-4 border-b border-gray-200">
 					<SheetTitle className="flex items-center gap-2 text-gray-900">
 						<History className="h-5 w-5 text-blue-600" />
