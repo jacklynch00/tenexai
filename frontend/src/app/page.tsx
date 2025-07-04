@@ -118,12 +118,12 @@ export default function Home() {
 			<Header onGetStarted={handleGetStarted} />
 			<HistorySidebar />
 			<main className='flex-1 overflow-auto'>
-				<div className='max-w-7xl mx-auto px-4 pt-24 pb-16'>
+				<div className='max-w-7xl mx-auto px-4 pt-20 sm:pt-28 pb-16'>
 					{appState === 'input' && (
 						<>
-							<div className='text-center mb-16'>
-								<h1 className='text-5xl font-bold text-gray-900 mb-6'>How AI Automation Analysis Works In 3 Simple Steps</h1>
-								<p className='text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed'>
+							<div className='text-center mb-12 sm:mb-16'>
+								<h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-2'>How AI Automation Analysis Works In 3 Simple Steps</h1>
+								<p className='text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4'>
 									The process of identifying automation opportunities is complicated and time-consuming. Most teams struggle with manual tasks that drain
 									productivity and resources. We have designed a unique AI-powered process that analyzes your job descriptions and reveals specific automation
 									opportunities with detailed ROI calculations in minutes.
@@ -131,22 +131,22 @@ export default function Home() {
 							</div>
 
 							{/* 3-Step Process */}
-							<div className='mb-16'>
-								<div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto'>
+							<div className='mb-12 sm:mb-16'>
+								<div className='grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto px-4'>
 									{/* Step 1 */}
 									<div className='text-center'>
-										<div className='w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4'>1</div>
-										<h3 className='text-xl font-semibold text-gray-900 mb-3'>Input Your Job Description</h3>
-										<p className='text-gray-600 leading-relaxed'>
+										<div className='w-14 h-14 sm:w-16 sm:h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold mx-auto mb-4'>1</div>
+										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Input Your Job Description</h3>
+										<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
 											Paste any job description and select your industry. Our AI will analyze every task and responsibility to identify automation potential.
 										</p>
 									</div>
 
 									{/* Step 2 */}
 									<div className='text-center'>
-										<div className='w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4'>2</div>
-										<h3 className='text-xl font-semibold text-gray-900 mb-3'>AI Analyzes & Calculates ROI</h3>
-										<p className='text-gray-600 leading-relaxed'>
+										<div className='w-14 h-14 sm:w-16 sm:h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold mx-auto mb-4'>2</div>
+										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>AI Analyzes & Calculates ROI</h3>
+										<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
 											Our advanced AI identifies specific automation opportunities, estimates time savings, and calculates detailed ROI projections with
 											implementation costs.
 										</p>
@@ -154,9 +154,9 @@ export default function Home() {
 
 									{/* Step 3 */}
 									<div className='text-center'>
-										<div className='w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4'>3</div>
-										<h3 className='text-xl font-semibold text-gray-900 mb-3'>Get Actionable Implementation Plan</h3>
-										<p className='text-gray-600 leading-relaxed'>
+										<div className='w-14 h-14 sm:w-16 sm:h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold mx-auto mb-4'>3</div>
+										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Get Actionable Implementation Plan</h3>
+										<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
 											Receive a comprehensive report with task-by-task automation recommendations, implementation roadmap, and projected cost savings.
 										</p>
 									</div>
@@ -164,25 +164,25 @@ export default function Home() {
 							</div>
 
 							{/* Benefits Section */}
-							<div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16'>
+							<div className='grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto mb-12 sm:mb-16 px-4'>
 								{/* Benefit 1 */}
-								<div className='bg-white rounded-lg shadow-lg p-8'>
-									<div className='w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4'>
-										<svg className='w-6 h-6 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+								<div className='bg-white rounded-lg shadow-lg p-6 sm:p-8'>
+									<div className='w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4'>
+										<svg className='w-5 h-5 sm:w-6 sm:h-6 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
 											<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 10V3L4 14h7v7l9-11h-7z' />
 										</svg>
 									</div>
-									<h3 className='text-xl font-semibold text-gray-900 mb-3'>Instantly Identify High-ROI Opportunities</h3>
-									<p className='text-gray-600 leading-relaxed'>
+									<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Instantly Identify High-ROI Opportunities</h3>
+									<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
 										Our AI scans every task in your job description and calculates which activities offer the highest return on automation investment. Get
 										specific recommendations ranked by potential savings and implementation difficulty.
 									</p>
 								</div>
 
 								{/* Benefit 2 */}
-								<div className='bg-white rounded-lg shadow-lg p-8'>
-									<div className='w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4'>
-										<svg className='w-6 h-6 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+								<div className='bg-white rounded-lg shadow-lg p-6 sm:p-8'>
+									<div className='w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4'>
+										<svg className='w-5 h-5 sm:w-6 sm:h-6 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
 											<path
 												strokeLinecap='round'
 												strokeLinejoin='round'
@@ -191,8 +191,8 @@ export default function Home() {
 											/>
 										</svg>
 									</div>
-									<h3 className='text-xl font-semibold text-gray-900 mb-3'>Get Detailed Financial Projections</h3>
-									<p className='text-gray-600 leading-relaxed'>
+									<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Get Detailed Financial Projections</h3>
+									<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
 										Receive comprehensive ROI analysis with 3-year projections, payback periods, and implementation costs. Build a compelling business case for
 										automation initiatives with concrete financial data.
 									</p>
