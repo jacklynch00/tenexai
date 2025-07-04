@@ -1,0 +1,74 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="2" fill="white" opacity="0.3"/>
+  <circle cx="200" cy="150" r="1.5" fill="white" opacity="0.2"/>
+  <circle cx="1100" cy="100" r="2" fill="white" opacity="0.3"/>
+  <circle cx="1050" cy="200" r="1" fill="white" opacity="0.2"/>
+  <circle cx="150" cy="500" r="1.5" fill="white" opacity="0.2"/>
+  <circle cx="1150" cy="450" r="1" fill="white" opacity="0.3"/>
+  
+  <!-- Main content card -->
+  <rect x="100" y="100" width="1000" height="430" rx="24" fill="url(#cardGradient)" stroke="white" stroke-width="2" opacity="0.9"/>
+  
+  <!-- Title -->
+  <text x="600" y="200" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="64" font-weight="bold">
+    <tspan fill="#60a5fa">Automate</tspan> This Job
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="260" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="28" opacity="0.9">
+    AI-Powered Job Automation Analysis
+  </text>
+  
+  <!-- Description -->
+  <text x="600" y="320" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="22" opacity="0.8">
+    Discover automation opportunities with detailed ROI analysis
+  </text>
+  
+  <!-- Features -->
+  <g transform="translate(200, 380)">
+    <!-- Feature 1 -->
+    <rect x="0" y="0" width="240" height="80" rx="12" fill="white" opacity="0.1"/>
+    <text x="120" y="30" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+      🤖 AI Analysis
+    </text>
+    <text x="120" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" opacity="0.8">
+      Smart automation detection
+    </text>
+    
+    <!-- Feature 2 -->
+    <rect x="260" y="0" width="240" height="80" rx="12" fill="white" opacity="0.1"/>
+    <text x="380" y="30" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+      💰 ROI Calculation
+    </text>
+    <text x="380" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" opacity="0.8">
+      Precise cost-benefit analysis
+    </text>
+    
+    <!-- Feature 3 -->
+    <rect x="520" y="0" width="240" height="80" rx="12" fill="white" opacity="0.1"/>
+    <text x="640" y="30" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+      📊 Implementation Plan
+    </text>
+    <text x="640" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" opacity="0.8">
+      Step-by-step roadmap
+    </text>
+  </g>
+  
+  <!-- Bottom accent -->
+  <rect x="100" y="580" width="1000" height="4" rx="2" fill="white" opacity="0.3"/>
+</svg>

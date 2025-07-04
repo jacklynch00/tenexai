@@ -34,8 +34,33 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>Automate This Job</title>
-        <meta name="description" content="Discover AI automation opportunities for any job with detailed ROI analysis" />
+        <title>Automate This Job - AI-Powered Job Automation Analysis</title>
+        <meta name="description" content="Discover AI automation opportunities for any job with detailed ROI analysis. Get comprehensive automation recommendations and implementation roadmaps in minutes." />
+        
+        {/* OpenGraph tags */}
+        <meta property="og:title" content="Automate This Job - AI-Powered Job Automation Analysis" />
+        <meta property="og:description" content="Discover AI automation opportunities for any job with detailed ROI analysis. Get comprehensive automation recommendations and implementation roadmaps in minutes." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://automate-this-job.com" />
+        <meta property="og:image" content="/og-image.svg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Automate This Job - AI-Powered Job Automation Analysis" />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Automate This Job - AI-Powered Job Automation Analysis" />
+        <meta name="twitter:description" content="Discover AI automation opportunities for any job with detailed ROI analysis." />
+        <meta name="twitter:image" content="/og-image.svg" />
+        
+        {/* Additional meta tags */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Automate This Job" />
+        <meta name="keywords" content="AI automation, job analysis, ROI calculation, process automation, workflow optimization, productivity tools" />
+        
+        <link rel="canonical" href="https://automate-this-job.com" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>

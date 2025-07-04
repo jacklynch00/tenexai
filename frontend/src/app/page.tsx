@@ -9,6 +9,7 @@ import EmailCapture from '@/components/EmailCapture';
 import LoadingState from '@/components/LoadingState';
 import ResultsDashboard from '@/components/ResultsDashboard';
 import HistorySidebar from '@/components/HistorySidebar';
+import Header from '@/components/Header';
 import { saveAnalysis, generateId } from '@/lib/history';
 
 type AppState = 'input' | 'email' | 'loading' | 'results' | 'error';
@@ -105,11 +106,19 @@ export default function Home() {
 		analyzeMutation.reset();
 	};
 
+	const handleGetStarted = () => {
+		const inputSection = document.querySelector('[data-section="input"]');
+		if (inputSection) {
+			inputSection.scrollIntoView({ behavior: 'smooth' });
+		}
+	};
+
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex'>
+			<Header onGetStarted={handleGetStarted} />
 			<HistorySidebar />
 			<main className='flex-1 overflow-auto'>
-				<div className='max-w-7xl mx-auto px-4 py-16'>
+				<div className='max-w-7xl mx-auto px-4 pt-24 pb-16'>
 					{appState === 'input' && (
 						<>
 							<div className='text-center mb-16'>
@@ -192,7 +201,7 @@ export default function Home() {
 						</>
 					)}
 
-					<div className='max-w-3xl mx-auto'>
+					<div className='max-w-3xl mx-auto' data-section="input">
 						{appState === 'input' && <JobDescriptionInput onSubmit={handleJobDescriptionSubmit} />}
 
 						{appState === 'email' && <EmailCapture onSubmit={handleEmailSubmit} />}
