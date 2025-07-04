@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { analyzeJobDescription, type AnalyzeRequest } from '@/lib/api';
 import JobDescriptionInput from '@/components/JobDescriptionInput';
 import EmailCapture from '@/components/EmailCapture';
@@ -114,11 +115,12 @@ export default function Home() {
 	};
 
 	return (
-		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex'>
+		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col'>
 			<Header onGetStarted={handleGetStarted} />
-			<HistorySidebar />
-			<main className='flex-1 overflow-auto'>
-				<div className='max-w-7xl mx-auto px-4 pt-20 sm:pt-28 pb-16'>
+			<div className='flex flex-1'>
+				<HistorySidebar />
+				<main className='flex-1 overflow-auto'>
+					<div className='max-w-7xl mx-auto px-4 py-16'>
 					{appState === 'input' && (
 						<>
 							<div className='text-center mb-12 sm:mb-16'>
@@ -239,7 +241,13 @@ export default function Home() {
 						{appState === 'results' && analysisData && <ResultsDashboard analysis={analysisData.analysis} onStartOver={handleStartOver} />}
 					</div>
 				</div>
-			</main>
+					{process.env.NODE_ENV === 'development' && (
+						<div className="relative">
+							<ReactQueryDevtools initialIsOpen={false} />
+						</div>
+					)}
+				</main>
+			</div>
 		</div>
 	);
 }

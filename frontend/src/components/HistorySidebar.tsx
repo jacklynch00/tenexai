@@ -80,7 +80,7 @@ export default function HistorySidebar({ currentAnalysisId }: HistorySidebarProp
 	};
 
 	return (
-		<div className={cn('hidden lg:flex bg-white border-r border-gray-200 transition-all duration-300 flex-col min-h-screen sticky top-0', isOpen ? 'w-80' : 'w-12')}>
+		<div className={cn('hidden lg:flex bg-white border-r border-gray-200 transition-all duration-300 flex-col h-full', isOpen ? 'w-80' : 'w-12')}>
 			{isOpen ? (
 				<>
 					{/* Header */}
