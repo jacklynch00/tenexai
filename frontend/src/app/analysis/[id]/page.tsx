@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { getAnalysisById, SavedAnalysis } from '@/lib/history';
 import ResultsDashboard from '@/components/ResultsDashboard';
 import HistorySidebar from '@/components/HistorySidebar';
+import Header from '@/components/Header';
 import { ArrowLeft, FileText } from 'lucide-react';
 
 export default function AnalysisPage() {
@@ -36,10 +37,11 @@ export default function AnalysisPage() {
 
 	if (!analysis) {
 		return (
-			<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex'>
+			<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
+				<Header />
 				<HistorySidebar />
-				<main className='flex-1 overflow-auto'>
-					<div className='flex items-center justify-center min-h-screen'>
+				<main className='w-full'>
+					<div className='flex items-center justify-center min-h-screen pt-20 sm:pt-28'>
 						<div className='text-center'>
 							<h1 className='text-2xl font-bold text-gray-900 mb-4'>Analysis Not Found</h1>
 							<p className='text-gray-600 mb-6'>The analysis you&apos;re looking for doesn&apos;t exist or has been deleted.</p>
@@ -58,11 +60,12 @@ export default function AnalysisPage() {
 	};
 
 	return (
-		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex'>
+		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
+			<Header />
 			<HistorySidebar currentAnalysisId={analysis.id} />
 
-			<main className='flex-1 overflow-auto'>
-				<div className='max-w-7xl mx-auto px-4 py-8'>
+			<main className='w-full'>
+				<div className='max-w-7xl mx-auto px-4 pt-20 sm:pt-28 pb-8'>
 					{/* Header */}
 					<div className='mb-8'>
 						<button onClick={() => router.push('/')} className='inline-flex items-center text-blue-600 hover:text-blue-700 mb-4'>

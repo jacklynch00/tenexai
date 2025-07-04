@@ -4,14 +4,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { analyzeJobDescription, type AnalyzeRequest } from '@/lib/api';
+import { analyzeJobDescription } from '@/lib/api';
 import JobDescriptionInput from '@/components/JobDescriptionInput';
 import EmailCapture from '@/components/EmailCapture';
 import LoadingState from '@/components/LoadingState';
 import ResultsDashboard from '@/components/ResultsDashboard';
 import HistorySidebar from '@/components/HistorySidebar';
 import Header from '@/components/Header';
-import { saveAnalysis, generateId } from '@/lib/history';
+import { generateId } from '@/lib/history';
 
 type AppState = 'input' | 'email' | 'loading' | 'results' | 'error';
 
@@ -26,7 +26,6 @@ export default function Home() {
 	const [jobDescription, setJobDescription] = useState('');
 	const [industry, setIndustry] = useState('');
 	const [title, setTitle] = useState('');
-	const [email, setEmail] = useState('');
 	const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [sessionId, setSessionId] = useState<string>('');
@@ -77,8 +76,6 @@ export default function Home() {
 	};
 
 	const handleEmailSubmit = async (userEmail?: string) => {
-		setEmail(userEmail || '');
-		
 		const requestData = {
 			job_description: jobDescription,
 			industry: industry,
@@ -94,7 +91,6 @@ export default function Home() {
 		setJobDescription('');
 		setIndustry('');
 		setTitle('');
-		setEmail('');
 		setAnalysisData(null);
 		setErrorMessage('');
 		setSessionId('');
@@ -115,89 +111,100 @@ export default function Home() {
 	};
 
 	return (
-		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col'>
+		<div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
 			<Header onGetStarted={handleGetStarted} />
-			<div className='flex flex-1'>
-				<HistorySidebar />
-				<main className='flex-1 overflow-auto'>
-					<div className='max-w-7xl mx-auto px-4 py-16'>
+			<HistorySidebar />
+			<main className='w-full'>
+				<div className='max-w-7xl mx-auto px-4 pt-20 sm:pt-28 pb-16'>
 					{appState === 'input' && (
 						<>
 							<div className='text-center mb-12 sm:mb-16'>
-								<h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-2'>How AI Automation Analysis Works In 3 Simple Steps</h1>
-								<p className='text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4'>
-									The process of identifying automation opportunities is complicated and time-consuming. Most teams struggle with manual tasks that drain
-									productivity and resources. We have designed a unique AI-powered process that analyzes your job descriptions and reveals specific automation
-									opportunities with detailed ROI calculations in minutes.
+								<h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 px-2'>
+									Discover automation opportunities in
+									<span className='block text-blue-600'>under 2 minutes</span>
+								</h1>
+								<p className='text-xl sm:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4 mb-8'>
+									Skip months of manual analysis. Get AI-powered automation recommendations with precise ROI calculations, so you can build your business case before investing in any technology.
 								</p>
+								<div className='flex flex-wrap justify-center gap-4 sm:gap-6 text-sm sm:text-base text-gray-500'>
+									<div className='flex items-center'>
+										<svg className='w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+											<path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
+										</svg>
+										Detailed task breakdown
+									</div>
+									<div className='flex items-center'>
+										<svg className='w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+											<path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
+										</svg>
+										3-year ROI projections
+									</div>
+									<div className='flex items-center'>
+										<svg className='w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+											<path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
+										</svg>
+										Implementation roadmap
+									</div>
+								</div>
 							</div>
 
 							{/* 3-Step Process */}
 							<div className='mb-12 sm:mb-16'>
+								<h2 className='text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 sm:mb-12'>How it works</h2>
 								<div className='grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto px-4'>
 									{/* Step 1 */}
 									<div className='text-center'>
 										<div className='w-14 h-14 sm:w-16 sm:h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold mx-auto mb-4'>1</div>
-										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Input Your Job Description</h3>
+										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Paste job description</h3>
 										<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
-											Paste any job description and select your industry. Our AI will analyze every task and responsibility to identify automation potential.
+											Copy any job posting and select the industry. Takes 30 seconds.
 										</p>
 									</div>
 
 									{/* Step 2 */}
 									<div className='text-center'>
 										<div className='w-14 h-14 sm:w-16 sm:h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold mx-auto mb-4'>2</div>
-										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>AI Analyzes & Calculates ROI</h3>
+										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>AI analyzes in real-time</h3>
 										<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
-											Our advanced AI identifies specific automation opportunities, estimates time savings, and calculates detailed ROI projections with
-											implementation costs.
+											Our AI identifies automation opportunities and calculates precise ROI within 90 seconds.
 										</p>
 									</div>
 
 									{/* Step 3 */}
 									<div className='text-center'>
 										<div className='w-14 h-14 sm:w-16 sm:h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold mx-auto mb-4'>3</div>
-										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Get Actionable Implementation Plan</h3>
+										<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Get your roadmap</h3>
 										<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
-											Receive a comprehensive report with task-by-task automation recommendations, implementation roadmap, and projected cost savings.
+											Download a detailed plan with cost savings, implementation steps, and timeline.
 										</p>
 									</div>
 								</div>
 							</div>
 
 							{/* Benefits Section */}
-							<div className='grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto mb-12 sm:mb-16 px-4'>
-								{/* Benefit 1 */}
-								<div className='bg-white rounded-lg shadow-lg p-6 sm:p-8'>
-									<div className='w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4'>
-										<svg className='w-5 h-5 sm:w-6 sm:h-6 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-											<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 10V3L4 14h7v7l9-11h-7z' />
-										</svg>
+							<div className='text-center mb-12 sm:mb-16'>
+								<h2 className='text-2xl sm:text-3xl font-bold text-gray-900 mb-4'>Stop guessing what to automate</h2>
+								<p className='text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8 px-4'>
+									Get data-driven insights that help you prioritize automation investments and secure stakeholder buy-in.
+								</p>
+								
+								<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto px-4'>
+									<div className='bg-white rounded-xl shadow-lg p-6 text-center border border-gray-100'>
+										<div className='text-3xl font-bold text-blue-600 mb-2'>$50K+</div>
+										<div className='text-sm text-gray-600'>Average annual savings identified</div>
 									</div>
-									<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Instantly Identify High-ROI Opportunities</h3>
-									<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
-										Our AI scans every task in your job description and calculates which activities offer the highest return on automation investment. Get
-										specific recommendations ranked by potential savings and implementation difficulty.
-									</p>
-								</div>
-
-								{/* Benefit 2 */}
-								<div className='bg-white rounded-lg shadow-lg p-6 sm:p-8'>
-									<div className='w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4'>
-										<svg className='w-5 h-5 sm:w-6 sm:h-6 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-											<path
-												strokeLinecap='round'
-												strokeLinejoin='round'
-												strokeWidth={2}
-												d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'
-											/>
-										</svg>
+									<div className='bg-white rounded-xl shadow-lg p-6 text-center border border-gray-100'>
+										<div className='text-3xl font-bold text-green-600 mb-2'>8 months</div>
+										<div className='text-sm text-gray-600'>Typical payback period</div>
 									</div>
-									<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-3'>Get Detailed Financial Projections</h3>
-									<p className='text-gray-600 leading-relaxed text-sm sm:text-base'>
-										Receive comprehensive ROI analysis with 3-year projections, payback periods, and implementation costs. Build a compelling business case for
-										automation initiatives with concrete financial data.
-									</p>
+									<div className='bg-white rounded-xl shadow-lg p-6 text-center border border-gray-100'>
+										<div className='text-3xl font-bold text-purple-600 mb-2'>40%</div>
+										<div className='text-sm text-gray-600'>Average time savings per task</div>
+									</div>
+									<div className='bg-white rounded-xl shadow-lg p-6 text-center border border-gray-100'>
+										<div className='text-3xl font-bold text-orange-600 mb-2'>90 sec</div>
+										<div className='text-sm text-gray-600'>Complete analysis time</div>
+									</div>
 								</div>
 							</div>
 						</>
@@ -241,13 +248,12 @@ export default function Home() {
 						{appState === 'results' && analysisData && <ResultsDashboard analysis={analysisData.analysis} onStartOver={handleStartOver} />}
 					</div>
 				</div>
-					{process.env.NODE_ENV === 'development' && (
-						<div className="relative">
-							<ReactQueryDevtools initialIsOpen={false} />
-						</div>
-					)}
-				</main>
-			</div>
+			</main>
+			{process.env.NODE_ENV === 'development' && (
+				<div className="fixed bottom-4 right-4 z-50">
+					<ReactQueryDevtools initialIsOpen={false} />
+				</div>
+			)}
 		</div>
 	);
 }
